@@ -4,7 +4,6 @@ public class MainPage : ContentPage
 {
 	public MainPage()
 	{
-		BatchBegin();
 
 		Content = new VerticalStackLayout
 		{
@@ -14,6 +13,5 @@ public class MainPage : ContentPage
 			}
 		};
 
-		BatchCommit();
 	}
 }

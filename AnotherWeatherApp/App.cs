@@ -10,8 +10,9 @@ namespace AnotherWeatherApp
     {
         protected override Window CreateWindow(IActivationState? activationState)
         {
-            Windows[0].Page = new MainPage();
-            return Windows[0];
+            Window window = new();
+            window.Page = new MainPage();
+            return window;
         }
     }
 }
