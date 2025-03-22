@@ -39,5 +39,9 @@ namespace AnotherWeatherApp.Pages.Base
         {
             base.BindingContext = viewModel;
         }
+        protected new T BindingContext => (T)base.BindingContext;
+
     }
+
+
 }
