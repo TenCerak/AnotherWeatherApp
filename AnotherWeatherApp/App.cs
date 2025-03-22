@@ -1,4 +1,6 @@
-﻿using System;
+﻿using AnotherWeatherApp.Interfaces;
+using AnotherWeatherApp.ViewPages;
+using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Text;
@@ -6,15 +8,22 @@ using System.Threading.Tasks;
 
 namespace AnotherWeatherApp
 {
-    public partial class App : Application
+    partial class App : Application
     {
-        protected override Window CreateWindow(IActivationState? activationState)
+        readonly AppShell _appShell;
+        readonly IAnalyticsService _analyticsService;
+        public App(AppShell appshell,IAnalyticsService analyticsService
+            )
         {
-            return new Window
-            {
-                Title = "AnotherWeatherApp",
-                Page = new MainPage()
-            };
+            _appShell = appshell;
+            _analyticsService = analyticsService;
         }
+
+        protected override void OnStart()
+        {
+            _analyticsService.Track("App.OnStart");
+        }
+
+        protected override Window CreateWindow(IActivationState? activationState) => new(_appShell);
     }
 }
