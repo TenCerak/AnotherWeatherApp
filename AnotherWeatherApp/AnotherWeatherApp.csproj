@@ -83,5 +83,9 @@
 		<PackageReference Include="Sentry.Maui" Version="5.2.0" />
 	</ItemGroup>
 
+	<ItemGroup>
+	  <ProjectReference Include="..\Weather.BLL\Weather.BLL.csproj" />
+	</ItemGroup>
+
 
 </Project>

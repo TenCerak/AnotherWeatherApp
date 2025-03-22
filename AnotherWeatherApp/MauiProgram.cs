@@ -74,7 +74,7 @@ public static class MauiProgram
         services.AddTransient<NavPage>();
 
 
-        services.AddSingleton<OpenWeatherMapService>();
+        services.AddSingleton<IWeatherService,OpenWeatherMapService>();
     }
 
 

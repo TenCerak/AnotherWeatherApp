@@ -9,21 +9,36 @@ using System.Collections.Generic;
 using System.ComponentModel;
 using System.Linq;
 using System.Text;
+using System.Text.Json;
 using System.Threading.Tasks;
 
 namespace AnotherWeatherApp.Models
 {
     public partial class DetailForecastViewModel : BaseViewModel, INotifyPropertyChanged
     {
-        private readonly OpenWeatherMapService _weatherService;
+        private readonly IWeatherService _weatherService;
         [ObservableProperty]
-        string? currentWeather;
+        CurrentWeather? currentWeather;
 
-        public DetailForecastViewModel(IAnalyticsService analyticsService, IDispatcher dispatcher, OpenWeatherMapService weatherService) : base(analyticsService, dispatcher)
+        [ObservableProperty]
+        private string? temperature;
+
+        protected override void OnPropertyChanged(PropertyChangedEventArgs e)
+        {
+            if(e.PropertyName == nameof(CurrentWeather))
+            {
+                Temperature = CurrentWeather?.main.temp.ToString();
+            }
+            base.OnPropertyChanged(e);
+        }
+
+        public DetailForecastViewModel(IAnalyticsService analyticsService, IDispatcher dispatcher, IWeatherService weatherService) : base(analyticsService, dispatcher)
         {
             _weatherService = weatherService;
 
             LoadDataAsync().ConfigureAwait(false);
+
+            
         }
 
         public async Task LoadDataAsync()
@@ -38,7 +53,7 @@ namespace AnotherWeatherApp.Models
                 AnalyticsService.Report(ex);
             }
 
-            CurrentWeather = await _weatherService.GetCurrentWeatherAsync(location, CancellationToken.None);
+            CurrentWeather = await _weatherService.GetCurrentWeatherAsync(location.Latitude, location.Longitude, CancellationToken.None);
         }
 
 
