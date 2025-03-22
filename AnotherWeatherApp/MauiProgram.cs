@@ -12,28 +12,46 @@ using AnotherWeatherApp.ViewPages;
 using AnotherWeatherApp.ViewModels.Base;
 using AnotherWeatherApp.Pages.Base;
 using System.Diagnostics;
+using AnotherWeatherApp.Pages;
+using AnotherWeatherApp.Models;
+using System.Reflection;
 
 namespace AnotherWeatherApp;
 
 public static class MauiProgram
 {
-	public static MauiApp CreateMauiApp()
-    { 
+    public static MauiApp CreateMauiApp()
+    {
+
         var builder = MauiApp.CreateBuilder();
+
+
+        var currentAssembly = Assembly.GetExecutingAssembly();
+
+        var config = new ConfigurationBuilder()
+            .AddJsonStream(currentAssembly.GetManifestResourceStream("AnotherWeatherApp.appsettings.json"))
+            .Build();
+
+        builder.Configuration.AddConfiguration(config);
         builder
             .UseMauiApp<App>()
             .UseMauiCommunityToolkitMarkup()
             .UseMauiCommunityToolkit()
-            
+
             .ConfigureFonts(fonts =>
             {
                 fonts.AddFont("OpenSans-Regular.ttf", "OpenSansRegular");
                 fonts.AddFont("OpenSans-Semibold.ttf", "OpenSansSemibold");
-            })
-            .UseSentry(options =>
-            {
-                ConfigureSentryOptions(options);
             });
+
+        
+        builder.UseSentry(options =>
+        {
+            ConfigureSentryOptions(options, builder.Configuration);
+        });
+
+
+
 
 #if DEBUG
         builder.Logging.AddDebug();
@@ -42,7 +60,7 @@ public static class MauiProgram
         RegisterServices(builder.Services);
 
         return builder.Build();
-	}
+    }
 
     private static void RegisterServices(in IServiceCollection services)
     {
@@ -52,6 +70,11 @@ public static class MauiProgram
         services.AddSingleton<IAnalyticsService, AnalyticsService>();
 
         services.AddTransientWithShellRoute<MainPage, MainPageViewModel>();
+        services.AddTransientWithShellRoute<DetailForecastPage, DetailForecastViewModel>();
+        services.AddTransient<NavPage>();
+
+
+        services.AddSingleton<OpenWeatherMapService>();
     }
 
 
@@ -60,7 +83,7 @@ public static class MauiProgram
     {
         return services.AddTransientWithShellRoute<TPage, TViewModel>(AppShell.GetPageRoute<TPage>());
     }
-    static void ConfigureSentryOptions(SentryMauiOptions options)
+    static void ConfigureSentryOptions(SentryMauiOptions options, IConfiguration configuration)
     {
         options.TracesSampleRate = 1.0;
         options.IncludeTextInBreadcrumbs = true;
@@ -73,22 +96,22 @@ public static class MauiProgram
         options.ProfilesSampleRate = 1.0;
 
 
-        ConfigureDebugSentryOptions(options);
-        ConfigureReleaseSentryOptions(options);
+        ConfigureDebugSentryOptions(options, configuration);
+        ConfigureReleaseSentryOptions(options, configuration);
 
         [Conditional("DEBUG")]
-        static void ConfigureDebugSentryOptions(SentryMauiOptions options)
+        static void ConfigureDebugSentryOptions(SentryMauiOptions options, IConfiguration configuration)
         {
-            options.Dsn = "https://b342aeab536f6de9ea0cc578e4c78dc1@o4508921182617600.ingest.de.sentry.io/4508921184911440";
+            options.Dsn = configuration["SentryDSN"];
             options.Debug = true;
             options.Environment = "DEBUG";
             options.DiagnosticLevel = SentryLevel.Debug;
         }
 
         [Conditional("RELEASE")]
-        static void ConfigureReleaseSentryOptions(SentryMauiOptions options)
+        static void ConfigureReleaseSentryOptions(SentryMauiOptions options, IConfiguration configuration)
         {
-            options.Dsn = "https://b342aeab536f6de9ea0cc578e4c78dc1@o4508921182617600.ingest.de.sentry.io/4508921184911440";
+            options.Dsn = configuration["SentryDSN"];
             options.Environment = "RELEASE";
         }
     }
