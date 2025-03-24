@@ -13,7 +13,9 @@ public class OpenWeatherMapService : IDisposable, IWeatherService
 {
     private readonly IConfiguration _configuration;
     private RestClient _restClient;
+    private RestClient _restClientImg;
     private const string _baseUrl = "https://api.openweathermap.org/data/2.5/";
+    private const string _baseUrlImg = "https://openweathermap.org/img/wn/";
     private readonly string _apiKey;
     public OpenWeatherMapService(IConfiguration configuration)
     {
@@ -31,15 +33,16 @@ public class OpenWeatherMapService : IDisposable, IWeatherService
 
 
 
-    public async Task<CurrentWeather?> GetCurrentWeatherAsync(double latitude, double longitude, CancellationToken token = default)
+    public async Task<CurrentWeather?> GetCurrentWeatherAsync(double latitude, double longitude, CancellationToken token = default, string language = "en", string units = "metric")
     {
         //https://api.openweathermap.org/data/2.5/weather?lat={lat}&lon={lon}&appid={API key}
-
+        
         var request = new RestRequest("weather", Method.Get);
-        request.AddParameter("units", "metric");
+        request.AddParameter("units", units);
         request.AddParameter("lat", latitude);
         request.AddParameter("lon", longitude);
         request.AddParameter("appid", _apiKey);
+        request.AddParameter("lang", language);
 
         try
         {
@@ -53,9 +56,15 @@ public class OpenWeatherMapService : IDisposable, IWeatherService
         }
     }
 
+    public string GetImageSourceForWeatherAsync(Weather weather)
+    { 
+        return $"{_baseUrlImg}{weather.icon}@2x.png";
+    }
+
     public void Dispose()
     {
         _restClient?.Dispose();
+        _restClientImg?.Dispose();
     }
 }
 
