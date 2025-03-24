@@ -7,7 +7,9 @@ using CommunityToolkit.Mvvm.Input;
 using System;
 using System.Collections.Generic;
 using System.ComponentModel;
+using System.Globalization;
 using System.Linq;
+using System.Runtime.CompilerServices;
 using System.Text;
 using System.Text.Json;
 using System.Threading.Tasks;
@@ -21,24 +23,33 @@ namespace AnotherWeatherApp.Models
         CurrentWeather? currentWeather;
 
         [ObservableProperty]
-        private string? temperature;
+        ImageSource iconSource;
 
-        protected override void OnPropertyChanged(PropertyChangedEventArgs e)
-        {
-            if(e.PropertyName == nameof(CurrentWeather))
-            {
-                Temperature = CurrentWeather?.main.temp.ToString();
-            }
-            base.OnPropertyChanged(e);
-        }
+        [ObservableProperty]
+        string? description;
+
+
 
         public DetailForecastViewModel(IAnalyticsService analyticsService, IDispatcher dispatcher, IWeatherService weatherService) : base(analyticsService, dispatcher)
         {
             _weatherService = weatherService;
-
-            LoadDataAsync().ConfigureAwait(false);
-
             
+            LoadDataAsync().ConfigureAwait(true);
+        }
+
+        protected override void OnPropertyChanged(PropertyChangedEventArgs e)
+        {
+            if(e.PropertyName == nameof(CurrentWeather) && CurrentWeather is not null)
+            {
+                IconSource = new UriImageSource() 
+                {
+                    Uri = new Uri(_weatherService.GetImageSourceForWeatherAsync(CurrentWeather.weather[0])),
+                    CachingEnabled = true,
+                    CacheValidity = new TimeSpan(1,0,0) 
+                };
+                Description = CurrentWeather.weather[0].description;
+            }
+            base.OnPropertyChanged(e);
         }
 
         public async Task LoadDataAsync()
@@ -46,14 +57,22 @@ namespace AnotherWeatherApp.Models
             Location location = new Location(0, 0);
             try
             {
-                location = await Geolocation.GetLastKnownLocationAsync().ConfigureAwait(true);
+                location = await Geolocation.GetLastKnownLocationAsync().ConfigureAwait(false);
+
+                CurrentWeather = await _weatherService.GetCurrentWeatherAsync(
+                        location.Latitude,
+                        location.Longitude,
+                        CancellationToken.None,
+                        CultureInfo.CurrentCulture.TwoLetterISOLanguageName
+                    )
+                    .ConfigureAwait(false);
+
             }
             catch (Exception ex)
             {
                 AnalyticsService.Report(ex);
             }
 
-            CurrentWeather = await _weatherService.GetCurrentWeatherAsync(location.Latitude, location.Longitude, CancellationToken.None);
         }
 
 
