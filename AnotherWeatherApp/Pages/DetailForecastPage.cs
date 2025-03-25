@@ -19,36 +19,52 @@ namespace AnotherWeatherApp.Pages
         StringConverter StringConverter = new StringConverter();
         public DetailForecastPage(IAnalyticsService analyticsService, DetailForecastViewModel viewModel) : base(viewModel, analyticsService)
         {
-            Content = new StackLayout
-            {
-                Children =
+            Content =
+                new ScrollView()
+                {
+                    Content =
+                    new StackLayout
                     {
-                        new Label { Text = "Detail Forecast" },
-                        new Button {Text = "Get current weather", Command = new Command(async () => await BindingContext.LoadDataAsync().ConfigureAwait(true)) },
-                        new Label { Text = "Current Weather" },
-                 
+                        Children =
+                        {
+                            new Label { Text = "Detail Forecast" },
+                            new Button { Text = "Get current weather", Command = new Command(async () => await BindingContext.LoadDataAsync().ConfigureAwait(true)) },
+                            new Label { Text = "Current Weather" },
 
-                        new CurrentWeatherContentView(BindingContext),
 
-                        new Label().Bind<Label, DetailForecastViewModel, CurrentWeather, string>(Label.TextProperty, getter: static (DetailForecastViewModel vm) => vm.CurrentWeather, converter: StringConverter),
+                            new CurrentWeatherContentView(BindingContext).Padding(new(20)),
+
+                            new Label().Bind<Label, DetailForecastViewModel, CurrentWeather, string>(Label.TextProperty,
+                            getter: static (DetailForecastViewModel vm) => vm.CurrentWeather, converter: StringConverter)
+                            .Padding(20),
+
+                            new Label()
+                            .Text("---------------------------------------------"),
+
+                            new Label().Bind<Label, DetailForecastViewModel, HourlyForecast, string>(Label.TextProperty,
+                            getter: static (DetailForecastViewModel vm) => vm.Forecast, converter: StringConverter)
+                            .Padding(20),
+
+                        }
 
                     }
-            };
-        }        
-    }
 
-    public class StringConverter : IValueConverter
-    {
-        object? IValueConverter.Convert(object? value, Type targetType, object? parameter, CultureInfo culture)
-        {
-            return JsonSerializer.Serialize(value);
-        }
-
-        object? IValueConverter.ConvertBack(object? value, Type targetType, object? parameter, CultureInfo culture)
-        {
-            return null;
+                };
         }
     }
 
+        public class StringConverter : IValueConverter
+        {
+            object? IValueConverter.Convert(object? value, Type targetType, object? parameter, CultureInfo culture)
+            {
+                return JsonSerializer.Serialize(value,options: new() { WriteIndented = true});
+            }
 
-}
+            object? IValueConverter.ConvertBack(object? value, Type targetType, object? parameter, CultureInfo culture)
+            {
+                return null;
+            }
+        }
+
+
+    }

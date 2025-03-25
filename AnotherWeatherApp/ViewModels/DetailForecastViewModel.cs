@@ -23,6 +23,9 @@ namespace AnotherWeatherApp.Models
         CurrentWeather? currentWeather;
 
         [ObservableProperty]
+        HourlyForecast? forecast;
+
+        [ObservableProperty]
         ImageSource iconSource;
 
         [ObservableProperty]
@@ -59,13 +62,24 @@ namespace AnotherWeatherApp.Models
             {
                 location = await Geolocation.GetLastKnownLocationAsync().ConfigureAwait(false);
 
-                CurrentWeather = await _weatherService.GetCurrentWeatherAsync(
+                var CurrentWeatherTask = _weatherService.GetCurrentWeatherAsync(
                         location.Latitude,
                         location.Longitude,
                         CancellationToken.None,
                         CultureInfo.CurrentCulture.TwoLetterISOLanguageName
-                    )
-                    .ConfigureAwait(false);
+                    );
+
+                var ForecastTask = _weatherService.GetHourlyForecastAsync(
+                                            location.Latitude,
+                        location.Longitude,
+                        CancellationToken.None,
+                        CultureInfo.CurrentCulture.TwoLetterISOLanguageName
+                    );
+
+                await Task.WhenAll(new List<Task>{ ForecastTask, CurrentWeatherTask }).ConfigureAwait(false);
+
+                CurrentWeather = CurrentWeatherTask.Result;
+                Forecast = ForecastTask.Result;
 
             }
             catch (Exception ex)
