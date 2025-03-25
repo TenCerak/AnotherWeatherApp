@@ -28,7 +28,7 @@ public class City
 
 public class Forecast
 {
-    public int dt { get; set; }
+    public long dt { get; set; }
     public Main main { get; set; }
     public List<Weather> weather { get; set; }
     public Clouds clouds { get; set; }

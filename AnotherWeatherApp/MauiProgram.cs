@@ -15,6 +15,7 @@ using System.Diagnostics;
 using AnotherWeatherApp.Pages;
 using AnotherWeatherApp.Models;
 using System.Reflection;
+using DevExpress.Maui;
 
 namespace AnotherWeatherApp;
 
@@ -34,6 +35,8 @@ public static class MauiProgram
 
         builder.Configuration.AddConfiguration(config);
         builder
+            .UseDevExpress()
+            .UseDevExpressCharts()
             .UseMauiApp<App>()
             .UseMauiCommunityToolkitMarkup()
             .UseMauiCommunityToolkit()

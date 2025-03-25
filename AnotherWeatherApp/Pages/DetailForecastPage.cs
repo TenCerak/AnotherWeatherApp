@@ -11,6 +11,7 @@ using System.Runtime.CompilerServices;
 using System.Text;
 using System.Text.Json;
 using System.Threading.Tasks;
+using DevExpress.Maui.Charts;
 
 namespace AnotherWeatherApp.Pages
 {
@@ -19,6 +20,7 @@ namespace AnotherWeatherApp.Pages
         StringConverter StringConverter = new StringConverter();
         public DetailForecastPage(IAnalyticsService analyticsService, DetailForecastViewModel viewModel) : base(viewModel, analyticsService)
         {
+            
             Content =
                 new ScrollView()
                 {
@@ -33,6 +35,7 @@ namespace AnotherWeatherApp.Pages
 
 
                             new CurrentWeatherContentView(BindingContext).Padding(new(20)),
+                            AddChartView(),
 
                             new Label().Bind<Label, DetailForecastViewModel, CurrentWeather, string>(Label.TextProperty,
                             getter: static (DetailForecastViewModel vm) => vm.CurrentWeather, converter: StringConverter)
@@ -51,20 +54,41 @@ namespace AnotherWeatherApp.Pages
 
                 };
         }
+
+        ChartView AddChartView()
+        {
+
+            var chartView = new ChartView();
+            
+            var series = new LineSeries();
+            var source = new HourlyWeatherDataChartAdapter();
+            source.HourlyForecast = BindingContext.Forecast;
+            series.Bind(BindingContextProperty, static (DetailForecastViewModel vm) => vm.Forecast);
+
+
+
+
+            chartView.Bind(BindingContextProperty,static (DetailForecastViewModel vm) => vm.Forecast);
+            return chartView;
+        }
+        
     }
 
-        public class StringConverter : IValueConverter
-        {
-            object? IValueConverter.Convert(object? value, Type targetType, object? parameter, CultureInfo culture)
-            {
-                return JsonSerializer.Serialize(value,options: new() { WriteIndented = true});
-            }
+    
 
-            object? IValueConverter.ConvertBack(object? value, Type targetType, object? parameter, CultureInfo culture)
-            {
-                return null;
-            }
+
+    public class StringConverter : IValueConverter
+    {
+        object? IValueConverter.Convert(object? value, Type targetType, object? parameter, CultureInfo culture)
+        {
+            return JsonSerializer.Serialize(value, options: new() { WriteIndented = true });
         }
 
-
+        object? IValueConverter.ConvertBack(object? value, Type targetType, object? parameter, CultureInfo culture)
+        {
+            return null;
+        }
     }
+
+
+}

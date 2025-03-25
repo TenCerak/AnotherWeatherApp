@@ -70,7 +70,7 @@ namespace AnotherWeatherApp.Models
                     );
 
                 var ForecastTask = _weatherService.GetHourlyForecastAsync(
-                                            location.Latitude,
+                        location.Latitude,
                         location.Longitude,
                         CancellationToken.None,
                         CultureInfo.CurrentCulture.TwoLetterISOLanguageName
