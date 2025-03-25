@@ -42,6 +42,7 @@ public class Main
     public int humidity { get; set; }
     public int sea_level { get; set; }
     public int grnd_level { get; set; }
+    public float? temp_kf { get; set; }
 }
 
 public class Wind

@@ -56,6 +56,29 @@ public class OpenWeatherMapService : IDisposable, IWeatherService
         }
     }
 
+    public async Task<HourlyForecast?> GetHourlyForecastAsync(double latitude, double longitude, CancellationToken token = default, string language = "en", string units = "metric")
+    {
+        //https://api.openweathermap.org/data/2.5/weather?lat={lat}&lon={lon}&appid={API key}
+
+        var request = new RestRequest("forecast", Method.Get);
+        request.AddParameter("units", units);
+        request.AddParameter("lat", latitude);
+        request.AddParameter("lon", longitude);
+        request.AddParameter("appid", _apiKey);
+        request.AddParameter("lang", language);
+
+        try
+        {
+            var response = await _restClient.ExecuteAsync(request, token).ConfigureAwait(false);
+
+            return JsonSerializer.Deserialize<HourlyForecast>(response?.Content) ?? null;
+        }
+        catch (Exception ex)
+        {
+            throw new Exception("Error getting weather data", ex);
+        }
+    }
+
     public string GetImageSourceForWeatherAsync(Weather weather)
     { 
         return $"{_baseUrlImg}{weather.icon}@2x.png";
