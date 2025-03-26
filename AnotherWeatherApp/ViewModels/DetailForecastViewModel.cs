@@ -6,6 +6,7 @@ using CommunityToolkit.Mvvm.ComponentModel;
 using CommunityToolkit.Mvvm.Input;
 using System;
 using System.Collections.Generic;
+using System.Collections.ObjectModel;
 using System.ComponentModel;
 using System.Globalization;
 using System.Linq;
@@ -23,13 +24,16 @@ namespace AnotherWeatherApp.Models
         CurrentWeather? currentWeather;
 
         [ObservableProperty]
-        HourlyForecast? forecast;
+        HourlyForecastResponse? forecast;
 
         [ObservableProperty]
         ImageSource iconSource;
 
         [ObservableProperty]
         string? description;
+
+        [ObservableProperty]
+        ObservableCollection<HourlyForecast> hourlyForecasts;
 
 
 
@@ -80,6 +84,32 @@ namespace AnotherWeatherApp.Models
 
                 CurrentWeather = CurrentWeatherTask.Result;
                 Forecast = ForecastTask.Result;
+
+                if (Forecast is null) return;
+                if (HourlyForecasts is null) HourlyForecasts = new();
+
+                HourlyForecasts.Clear();
+                foreach (var item in Forecast.list)
+                {
+
+                    HourlyForecasts.Add(new()
+                    {
+                        Time = DateTimeOffset.FromUnixTimeSeconds(item.dt).LocalDateTime,
+                        Temperature = item.main.temp,
+                        Description = item.weather[0].description,
+                        FeelsLike = item.main.feels_like,
+                        Humidity = item.main.humidity,
+                        Pressure = item.main.pressure,
+                        WindSpeed = item.wind.speed,
+                        WindDirection = item.wind.deg,
+                        WindGust = item.wind.gust,
+                        RainPrecipitation = item.rain?._1h ?? 0,
+                        SnowPrecipitation = item.snow?._1h ?? 0
+
+
+                    });
+                }
+
 
             }
             catch (Exception ex)

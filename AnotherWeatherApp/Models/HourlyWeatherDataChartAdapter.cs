@@ -13,13 +13,13 @@ namespace AnotherWeatherApp.Models
         public static BindableProperty HourlyForecastProperty = BindableProperty
             .Create(
                 nameof(HourlyForecast),
-                typeof(HourlyForecast),
+                typeof(HourlyForecastResponse),
                 typeof(HourlyWeatherDataChartAdapter),
                 null
             );
 
         [ObservableProperty]
-        HourlyForecast? hourlyForecast;
+        HourlyForecastResponse? hourlyForecast;
 
         int IXYSeriesData.GetDataCount()
         {
@@ -33,7 +33,7 @@ namespace AnotherWeatherApp.Models
 
         DateTime IXYSeriesData.GetDateTimeArgument(int index)
         {
-            return DateTimeOffset.FromUnixTimeMilliseconds(HourlyForecast?.list.ToArray()[index].dt ?? 0).LocalDateTime;
+            return DateTimeOffset.FromUnixTimeMilliseconds((long)(HourlyForecast?.list.ToArray()[index].dt ?? 0)).LocalDateTime;
         }
 
         object IXYSeriesData.GetKey(int index)
@@ -43,7 +43,7 @@ namespace AnotherWeatherApp.Models
 
         double IXYSeriesData.GetNumericArgument(int index)
         {
-            return Convert.ToDouble(HourlyForecast?.list?.ToArray()?[index].main.temp);
+            return Convert.ToDouble((object?)(HourlyForecast?.list?.ToArray()?[index].main.temp));
         }
 
         string IXYSeriesData.GetQualitativeArgument(int index)
@@ -53,7 +53,7 @@ namespace AnotherWeatherApp.Models
 
         double IXYSeriesData.GetValue(DevExpress.Maui.Charts.ValueType valueType, int index)
         {
-            return Convert.ToDouble(HourlyForecast?.list?.ToArray()?[index].main.temp);
+            return Convert.ToDouble((object?)(HourlyForecast?.list?.ToArray()?[index].main.temp));
         }
     }
 }

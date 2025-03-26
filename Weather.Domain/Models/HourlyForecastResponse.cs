@@ -5,7 +5,7 @@ using System.Text;
 using System.Threading.Tasks;
 
 
-public class HourlyForecast
+public class HourlyForecastResponse
 {
     public string cod { get; set; }
     public int message { get; set; }

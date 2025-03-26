@@ -56,7 +56,7 @@ public class OpenWeatherMapService : IDisposable, IWeatherService
         }
     }
 
-    public async Task<HourlyForecast?> GetHourlyForecastAsync(double latitude, double longitude, CancellationToken token = default, string language = "en", string units = "metric")
+    public async Task<HourlyForecastResponse?> GetHourlyForecastAsync(double latitude, double longitude, CancellationToken token = default, string language = "en", string units = "metric")
     {
         //https://api.openweathermap.org/data/2.5/weather?lat={lat}&lon={lon}&appid={API key}
 
@@ -71,7 +71,7 @@ public class OpenWeatherMapService : IDisposable, IWeatherService
         {
             var response = await _restClient.ExecuteAsync(request, token).ConfigureAwait(false);
 
-            return JsonSerializer.Deserialize<HourlyForecast>(response?.Content) ?? null;
+            return JsonSerializer.Deserialize<HourlyForecastResponse>(response?.Content) ?? null;
         }
         catch (Exception ex)
         {
