@@ -20,6 +20,7 @@ namespace AnotherWeatherApp.Models
     public partial class DetailForecastViewModel : BaseViewModel, INotifyPropertyChanged
     {
         private readonly IWeatherService _weatherService;
+
         [ObservableProperty]
         CurrentWeather? currentWeather;
 
@@ -34,6 +35,9 @@ namespace AnotherWeatherApp.Models
 
         [ObservableProperty]
         ObservableCollection<HourlyForecast> hourlyForecasts;
+
+        [ObservableProperty]
+        bool? isLoading = false;
 
 
 
@@ -61,6 +65,7 @@ namespace AnotherWeatherApp.Models
 
         public async Task LoadDataAsync()
         {
+            IsLoading = true;
             Location location = new Location(0, 0);
             try
             {
@@ -70,14 +75,14 @@ namespace AnotherWeatherApp.Models
                         location.Latitude,
                         location.Longitude,
                         CancellationToken.None,
-                        CultureInfo.CurrentCulture.TwoLetterISOLanguageName
+                        CultureInfo.CurrentCulture.Name.Split('-')[1]
                     );
 
                 var ForecastTask = _weatherService.GetHourlyForecastAsync(
                         location.Latitude,
                         location.Longitude,
                         CancellationToken.None,
-                        CultureInfo.CurrentCulture.TwoLetterISOLanguageName
+                        CultureInfo.CurrentCulture.Name.Split('-')[1]
                     );
 
                 await Task.WhenAll(new List<Task>{ ForecastTask, CurrentWeatherTask }).ConfigureAwait(false);
@@ -91,8 +96,8 @@ namespace AnotherWeatherApp.Models
                 HourlyForecasts.Clear();
                 foreach (var item in Forecast.list)
                 {
-
-                    HourlyForecasts.Add(new()
+                    HourlyForecast forcast =
+                    new()
                     {
                         Time = DateTimeOffset.FromUnixTimeSeconds(item.dt).LocalDateTime,
                         Temperature = item.main.temp,
@@ -103,11 +108,20 @@ namespace AnotherWeatherApp.Models
                         WindSpeed = item.wind.speed,
                         WindDirection = item.wind.deg,
                         WindGust = item.wind.gust,
-                        RainPrecipitation = item.rain?._1h ?? 0,
-                        SnowPrecipitation = item.snow?._1h ?? 0
+                    };
 
+                    if (item.rain is not null)
+                    {
+                        if (item.rain._1h > 0) forcast.RainPrecipitation = item.rain._1h;
+                        else if (item.rain._3h > 0) forcast.RainPrecipitation = item.rain._3h;
+                    }
+                    if(item.snow is not null)
+                    {
+                        if (item.snow._1h > 0) forcast.SnowPrecipitation = item.snow._1h;
+                        else if (item.snow._3h > 0) forcast.SnowPrecipitation = item.snow._3h;
+                    }
 
-                    });
+                    HourlyForecasts.Add(forcast);
                 }
 
 
@@ -115,6 +129,10 @@ namespace AnotherWeatherApp.Models
             catch (Exception ex)
             {
                 AnalyticsService.Report(ex);
+            }
+            finally
+            {
+                IsLoading = false;
             }
 
         }

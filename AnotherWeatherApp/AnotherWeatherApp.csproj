@@ -89,8 +89,8 @@
 	</ItemGroup>
 
 	<ItemGroup>
-	  <Compile Update="Properties\Resources.cz.Designer.cs">
-	    <DependentUpon>Resources.cz.resx</DependentUpon>
+	  <Compile Update="Properties\Resources.cs.Designer.cs">
+	    <DependentUpon>Resources.cs.resx</DependentUpon>
 	    <DesignTime>True</DesignTime>
 	    <AutoGen>True</AutoGen>
 	  </Compile>
@@ -102,8 +102,8 @@
 	</ItemGroup>
 
 	<ItemGroup>
-	  <EmbeddedResource Update="Properties\Resources.cz.resx">
-	    <LastGenOutput>Resources.cz.Designer.cs</LastGenOutput>
+	  <EmbeddedResource Update="Properties\Resources.cs.resx">
+	    <LastGenOutput>Resources.cs.Designer.cs</LastGenOutput>
 	    <Generator>ResXFileCodeGenerator</Generator>
 	  </EmbeddedResource>
 	  <EmbeddedResource Update="Properties\Resources.resx">

@@ -13,6 +13,10 @@ using System.Text.Json;
 using System.Threading.Tasks;
 using DevExpress.Maui.Charts;
 using CommunityToolkit.Maui.Views;
+using Microsoft.Maui.Controls;
+using static CommunityToolkit.Maui.Markup.GridRowsColumns;
+using Microsoft.Maui.Layouts;
+
 namespace AnotherWeatherApp.Pages
 {
     public class DetailForecastPage : BaseContentPage<DetailForecastViewModel>
@@ -20,117 +24,30 @@ namespace AnotherWeatherApp.Pages
         StringConverter StringConverter = new StringConverter();
         public DetailForecastPage(IAnalyticsService analyticsService, DetailForecastViewModel viewModel) : base(viewModel, analyticsService)
         {
-
-            Content =
-                new ScrollView()
+            this.Title = Properties.Resources.DetailForecastTitle;
+            Content = new RefreshView()
+            {
+                Command = new Command(async () => await BindingContext.LoadDataAsync().ConfigureAwait(true)),
+                Content = new ScrollView()
                 {
-                    Content =
-                    new StackLayout
+
+                    Content = new FlexLayout()
                     {
-                        Children =
-                        {
-                            new Label { Text = "Detail Forecast" },
-                            new Button { Text = "Get current weather", Command = new Command( () => BindingContext.LoadDataAsync().ConfigureAwait(true)) },
-                            new Label { Text = "Current Weather" },
-
-
-                            new CurrentWeatherContentView(BindingContext).Padding(new(20)),
-
-                            new ChartView
-                                {
-                                    Series =
-                                    {
-                                        new LineSeries
-                                        {
-                                            Data = new SeriesDataAdapter
-                                            {
-                                                ArgumentDataMember = "Time",
-                                                AllowLiveDataUpdates = true,
-                                            }.Assign(out SeriesDataAdapter dataAdapter)
-                                            .Bind(SeriesDataAdapter.DataSourceProperty, static (DetailForecastViewModel vm) => vm.HourlyForecasts)                                            ,
-                                            Style = new LineSeriesStyle
-                                            {
-                                                Stroke = Colors.Orange,
-                                                MarkerStyle = new MarkerStyle
-                                                {
-                                                    Fill = Colors.Orange,
-                                                    Stroke = Colors.White,
-                                                }
-                                            }  ,
-                                            Label = new MarkerSeriesLabel
-                                            {
-                                                Angle = 45,
-                                                TextPattern = "{V}",
-                                                Indent = 10
-
-                                            },
-                                            DisplayName = "Temperature"
-
-                                        },
-                                        new BarSeries
-                                        {
-                                            Data = new SeriesDataAdapter
-                                            {
-                                                ArgumentDataMember = "Time",
-                                                AllowLiveDataUpdates = true,
-                                            }.Assign(out SeriesDataAdapter dataAdapterRain)
-                                            .Bind(SeriesDataAdapter.DataSourceProperty, static (DetailForecastViewModel vm) => vm.HourlyForecasts)                                            ,
-                                            Style = new BarSeriesStyle
-                                            {
-                                                Stroke = Colors.Blue,
-                                            },
-                                            DisplayName = "Rain"
-                                        },
-                                        new BarSeries
-                                        {
-                                            Data = new SeriesDataAdapter
-                                            {
-                                                ArgumentDataMember = "Time",
-                                                AllowLiveDataUpdates = true,
-                                            }.Assign(out SeriesDataAdapter dataAdapterSnow)
-                                            .Bind(SeriesDataAdapter.DataSourceProperty, static (DetailForecastViewModel vm) => vm.HourlyForecasts)                                            ,
-                                            Style = new BarSeriesStyle
-                                            {
-                                                Stroke = Colors.Blue,
-                                            },
-                                            DisplayName = "Snow"
-                                        }
-
-                                    }
-                                }.Row(0)
-                                .Height(300),
-                            //AddChartView()
-                            //.Height(300),
-                            new Expander()
-                            {
-                                IsExpanded = true,
-                                Content = new StackLayout()
-                                {
-                                    new Label().Bind<Label, DetailForecastViewModel, CurrentWeather, string>(Label.TextProperty,
-                                    getter: static (DetailForecastViewModel vm) => vm.CurrentWeather, converter: StringConverter)
-                                    .Padding(20),
-
-                                    new Label()
-                                    .Text("---------------------------------------------"),
-
-                                    new Label().Bind<Label, DetailForecastViewModel, HourlyForecastResponse, string>(Label.TextProperty,
-                                    getter: static (DetailForecastViewModel vm) => vm.Forecast, converter: StringConverter)
-                                    .Padding(20),
-                                }
-                            },
-
-
-                             
-
+                        JustifyContent = FlexJustify.SpaceBetween,
+                        AlignContent = FlexAlignContent.Start,
+                        Direction = FlexDirection.Column,
+                        HeightRequest = 700,
+                        Children = {
+                            new CurrentWeatherContentView(viewModel),
+                            new BasicHourlyForecastChartView(viewModel)
                         }
 
                     }
 
-                };
+                }
+            }
+            .Bind(RefreshView.IsRefreshingProperty, static (DetailForecastViewModel vm) => vm.IsLoading);
 
-            dataAdapter.ValueDataMembers.Add(new ValueDataMember { Member = nameof(HourlyForecast.Temperature), Type = DevExpress.Maui.Charts.ValueType.Value });
-            dataAdapterRain.ValueDataMembers.Add(new ValueDataMember { Member = nameof(HourlyForecast.RainPrecipitation), Type = DevExpress.Maui.Charts.ValueType.Value });
-            dataAdapterSnow.ValueDataMembers.Add(new ValueDataMember { Member = nameof(HourlyForecast.SnowPrecipitation), Type = DevExpress.Maui.Charts.ValueType.Value });
         }
 
         ChartView AddChartView()
@@ -144,7 +61,7 @@ namespace AnotherWeatherApp.Pages
             dataAdapter.AllowLiveDataUpdates = true;
             dataAdapter.ArgumentDataMember = nameof(HourlyForecast.Time);
 
-            
+
 
             ValueDataMember valueDataMember = new ValueDataMember();
             valueDataMember.Member = nameof(HourlyForecast.Temperature);

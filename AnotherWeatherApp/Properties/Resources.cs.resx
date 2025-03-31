@@ -123,7 +123,10 @@
   <data name="TemperatureMetricFormatString" xml:space="preserve">
     <value>Aktuální teplota: {0} °C</value>
   </data>
-  <data name="TemperatureMinMetricFormatString1" xml:space="preserve">
+  <data name="TemperatureMinMetricFormatString" xml:space="preserve">
     <value>Minimální teplota: {0} °C</value>
+  </data>
+  <data name="DetailForecastTitle" xml:space="preserve">
+    <value>Detailní předpověď</value>
   </data>
 </root>

@@ -1,4 +1,4 @@
-﻿<?xml version="1.0" encoding="utf-8"?>
+<?xml version="1.0" encoding="utf-8"?>
 <root>
   <!-- 
     Microsoft ResX Schema 
@@ -125,5 +125,8 @@
   </data>
   <data name="TemperatureMinMetricFormatString" xml:space="preserve">
     <value>Minimum temperature: {0} °C</value>
+  </data>
+  <data name="DetailForecastTitle" xml:space="preserve">
+    <value>Detail Forecast</value>
   </data>
 </root>

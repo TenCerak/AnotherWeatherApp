@@ -56,6 +56,8 @@ public class Precipitation
 {
     [JsonPropertyName("1h")]
     public float _1h { get; set; }
+    [JsonPropertyName("3h")]
+    public float _3h { get; set; }
 }
 
 public class Clouds

@@ -61,6 +61,15 @@ namespace AnotherWeatherApp.Properties {
         }
         
         /// <summary>
+        ///   Looks up a localized string similar to Detail Forecast.
+        /// </summary>
+        internal static string DetailForecastTitle {
+            get {
+                return ResourceManager.GetString("DetailForecastTitle", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Looks up a localized string similar to Maximum temperature: {0} °C.
         /// </summary>
         internal static string TemperatureMaxMetricFormatString {

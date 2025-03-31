@@ -14,8 +14,8 @@ namespace AnotherWeatherApp.Models
         public float FeelsLike { get; set; }
         public float Pressure { get; set; }
         public float Humidity { get; set; }
-        public float RainPrecipitation { get; set; }
-        public float SnowPrecipitation { get; set; }
+        public float? RainPrecipitation { get; set; }
+        public float? SnowPrecipitation { get; set; }
         public float WindSpeed { get; set; }
         public int WindDirection { get; set; }
         public float WindGust { get; set; }

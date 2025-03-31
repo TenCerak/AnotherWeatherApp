@@ -39,40 +39,41 @@ public class CurrentWeatherContentView : ContentView
 
                  .Size(100),
 
-                new VerticalStackLayout{
-                 new Label()
-                 .Bind(Label.TextProperty,
-                    getter: static (DetailForecastViewModel vm) => vm.CurrentWeather.main.temp,
-                    handlers:
-                    [
-                        (vm => vm, nameof(DetailForecastViewModel.CurrentWeather)),
-                        (vm => vm.CurrentWeather, nameof(DetailForecastViewModel.CurrentWeather.main.temp)),
-                    ],
-                    stringFormat: Properties.Resources.TemperatureMetricFormatString),
+                    new VerticalStackLayout{
+                         new Label()
+                         .Bind(Label.TextProperty,
+                            getter: static (DetailForecastViewModel vm) => vm.CurrentWeather.main.temp,
+                            handlers:
+                            [
+                                (vm => vm, nameof(DetailForecastViewModel.CurrentWeather)),
+                                (vm => vm.CurrentWeather, nameof(DetailForecastViewModel.CurrentWeather.main.temp)),
+                            ],
+                            stringFormat: Properties.Resources.TemperatureMetricFormatString),
 
-                 new Label()
-                 .Bind(Label.TextProperty,
-                    getter: static (DetailForecastViewModel vm) => vm.CurrentWeather.main.temp_min,
-                    handlers:
-                    [
-                        (vm => vm, nameof(DetailForecastViewModel.CurrentWeather)),
-                        (vm => vm.CurrentWeather, nameof(DetailForecastViewModel.CurrentWeather.main.temp_min)),
-                    ],
-                    stringFormat: Properties.Resources.TemperatureMinMetricFormatString),
+                         new Label()
+                         .Bind(Label.TextProperty,
+                            getter: static (DetailForecastViewModel vm) => vm.CurrentWeather.main.temp_min,
+                            handlers:
+                            [
+                                (vm => vm, nameof(DetailForecastViewModel.CurrentWeather)),
+                                (vm => vm.CurrentWeather, nameof(DetailForecastViewModel.CurrentWeather.main.temp_min)),
+                            ],
+                            stringFormat: Properties.Resources.TemperatureMinMetricFormatString),
 
-                 new Label()
-                 .Bind(Label.TextProperty,
-                    getter: static (DetailForecastViewModel vm) => vm.CurrentWeather.main.temp_max,
-                    handlers:
-                        [
-                            (vm => vm, nameof(DetailForecastViewModel.CurrentWeather)),
-                            (vm => vm.CurrentWeather, nameof(DetailForecastViewModel.CurrentWeather.main.temp_max)),
-                        ],
-                    stringFormat: Properties.Resources.TemperatureMaxMetricFormatString),
-                 new Label()
-                 .Bind(Label.TextProperty,
-                 getter: static (DetailForecastViewModel vm) => vm.Description)
-                }
+                         new Label()
+                         .Bind(Label.TextProperty,
+                            getter: static (DetailForecastViewModel vm) => vm.CurrentWeather.main.temp_max,
+                            handlers:
+                                [
+                                    (vm => vm, nameof(DetailForecastViewModel.CurrentWeather)),
+                                    (vm => vm.CurrentWeather, nameof(DetailForecastViewModel.CurrentWeather.main.temp_max)),
+                                ],
+                            stringFormat: Properties.Resources.TemperatureMaxMetricFormatString),
+                         new Label()
+                         .Bind(Label.TextProperty,
+                         getter: static (DetailForecastViewModel vm) => vm.Description)
+                    }
+                    .CenterVertical()
 
                 }
             }
