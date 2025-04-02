@@ -16,6 +16,7 @@ using CommunityToolkit.Maui.Views;
 using Microsoft.Maui.Controls;
 using static CommunityToolkit.Maui.Markup.GridRowsColumns;
 using Microsoft.Maui.Layouts;
+using DevExpress.Maui.Controls;
 
 namespace AnotherWeatherApp.Pages
 {
@@ -24,55 +25,62 @@ namespace AnotherWeatherApp.Pages
         StringConverter StringConverter = new StringConverter();
         public DetailForecastPage(IAnalyticsService analyticsService, DetailForecastViewModel viewModel) : base(viewModel, analyticsService)
         {
+            
             this.Title = Properties.Resources.DetailForecastTitle;
             Content = new RefreshView()
             {
                 Command = new Command(async () => await BindingContext.LoadDataAsync().ConfigureAwait(true)),
-                Content = new ScrollView()
+
+
+                Content = new FlexLayout()
                 {
-
-                    Content = new FlexLayout()
+                    JustifyContent = FlexJustify.Start,
+                    AlignContent = FlexAlignContent.Stretch,
+                    Direction = FlexDirection.Column,
+                    GestureRecognizers =
                     {
-                        JustifyContent = FlexJustify.SpaceBetween,
-                        AlignContent = FlexAlignContent.Start,
-                        Direction = FlexDirection.Column,
-                        HeightRequest = 700,
-                        Children = {
-                            new CurrentWeatherContentView(viewModel),
-                            new BasicHourlyForecastChartView(viewModel)
+                        new SwipeGestureRecognizer()
+                        {
+                            Direction = SwipeDirection.Down,
+                            Command = new Command(async () => await  BindingContext.LoadDataAsync().ConfigureAwait(false))
                         }
-
+                    },
+                    Children = {
+                        
+                        new CurrentWeatherContentView(viewModel),
+                        new TabView()
+                        {
+                            ItemsSource = new List<TabViewItem>()
+                            {
+                                new TabViewItem()
+                                {
+                                    HeaderText = "Forecast",
+                                    Content = new BasicHourlyForecastChartView(viewModel),
+                                },
+                                 new TabViewItem()
+                                {
+                                    HeaderText = "Test",
+                                    Content = new ScrollView()
+                                    {
+                                        Content = new StackLayout()
+                                        {
+                                        Children = {
+                                            new Label().Text("Test").TextColor(Colors.White)
+                                        }
+                                            }
+                                    }
+                                }
+                            },
+                            
+                        }.Shrink(700)
                     }
 
                 }
+
+
             }
             .Bind(RefreshView.IsRefreshingProperty, static (DetailForecastViewModel vm) => vm.IsLoading);
 
-        }
-
-        ChartView AddChartView()
-        {
-
-            var chartView = new ChartView();
-
-            var series = new LineSeries();
-            SeriesDataAdapter dataAdapter = new SeriesDataAdapter();
-            dataAdapter.Bind(SeriesDataAdapter.DataSourceProperty, static (DetailForecastViewModel vm) => vm.HourlyForecasts);
-            dataAdapter.AllowLiveDataUpdates = true;
-            dataAdapter.ArgumentDataMember = nameof(HourlyForecast.Time);
-
-
-
-            ValueDataMember valueDataMember = new ValueDataMember();
-            valueDataMember.Member = nameof(HourlyForecast.Temperature);
-            valueDataMember.Type = DevExpress.Maui.Charts.ValueType.Value;
-            valueDataMember.Bind(ValueDataMember.BindingContextProperty, static (DetailForecastViewModel vm) => vm.HourlyForecasts);
-
-            dataAdapter.ValueDataMembers.Add(valueDataMember);
-            series.Data = dataAdapter;
-            chartView.Series.Add(series);
-            chartView.Bind(BindingContextProperty, static (DetailForecastViewModel vm) => vm.HourlyForecasts);
-            return chartView;
         }
 
     }

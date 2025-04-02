@@ -78,7 +78,8 @@
 		<PackageReference Include="Microsoft.Extensions.Configuration.Binder" Version="9.0.3" />
 		<PackageReference Include="Microsoft.Extensions.Configuration.UserSecrets" Version="6.0.1" />
 		<PackageReference Include="Microsoft.Maui.Controls" Version="9.0.40" />
-		<PackageReference Include="DevExpress.Maui.Charts" Version="24.2.5" />
+		<PackageReference Include="DevExpress.Maui.Charts" Version="24.2.6" />
+		<PackageReference Include="DevExpress.Maui.Controls" Version="24.2.6" />
 		<PackageReference Include="Microsoft.Extensions.Logging.Debug" Version="9.0.2" />
 		<PackageReference Include="RestSharp" Version="112.1.0" />
 		<PackageReference Include="Sentry.Maui" Version="5.2.0" />

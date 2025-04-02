@@ -36,6 +36,7 @@ public static class MauiProgram
         builder.Configuration.AddConfiguration(config);
         builder
             .UseDevExpress()
+            .UseDevExpressControls()
             .UseDevExpressCharts()
             .UseMauiApp<App>()
             .UseMauiCommunityToolkitMarkup()
