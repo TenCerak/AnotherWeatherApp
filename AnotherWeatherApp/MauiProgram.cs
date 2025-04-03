@@ -75,7 +75,7 @@ public static class MauiProgram
 
         services.AddTransientWithShellRoute<MainPage, MainPageViewModel>();
         services.AddTransientWithShellRoute<DetailForecastPage, DetailForecastViewModel>();
-        services.AddTransient<NavPage>();
+        services.AddTransientWithShellRoute<DebugPage, DetailForecastViewModel>();
 
 
         services.AddSingleton<IWeatherService,OpenWeatherMapService>();

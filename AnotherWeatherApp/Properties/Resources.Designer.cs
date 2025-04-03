@@ -70,6 +70,24 @@ namespace AnotherWeatherApp.Properties {
         }
         
         /// <summary>
+        ///   Looks up a localized string similar to Pressure.
+        /// </summary>
+        internal static string Pressure {
+            get {
+                return ResourceManager.GetString("Pressure", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Temperature.
+        /// </summary>
+        internal static string Temperature {
+            get {
+                return ResourceManager.GetString("Temperature", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Looks up a localized string similar to Maximum temperature: {0} °C.
         /// </summary>
         internal static string TemperatureMaxMetricFormatString {
@@ -93,6 +111,15 @@ namespace AnotherWeatherApp.Properties {
         internal static string TemperatureMinMetricFormatString {
             get {
                 return ResourceManager.GetString("TemperatureMinMetricFormatString", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Wind.
+        /// </summary>
+        internal static string Wind {
+            get {
+                return ResourceManager.GetString("Wind", resourceCulture);
             }
         }
     }

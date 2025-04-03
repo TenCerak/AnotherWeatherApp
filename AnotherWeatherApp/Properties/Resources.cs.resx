@@ -129,4 +129,13 @@
   <data name="DetailForecastTitle" xml:space="preserve">
     <value>Detailní předpověď</value>
   </data>
+  <data name="Temperature" xml:space="preserve">
+    <value>Teplota</value>
+  </data>
+  <data name="Pressure" xml:space="preserve">
+    <value>Tlak</value>
+  </data>
+  <data name="Wind" xml:space="preserve">
+    <value>Vítr</value>
+  </data>
 </root>

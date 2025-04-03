@@ -10,11 +10,11 @@ namespace AnotherWeatherApp
 {
     partial class AppShell : Shell
     {
-        public AppShell(MainPage page, NavPage navPage,DetailForecastPage detailForecastPage)
+        public AppShell(MainPage page, DebugPage debugPage,DetailForecastPage detailForecastPage)
         {
             Items.Add(detailForecastPage);
             Items.Add(page);
-            Items.Add(navPage);
+            Items.Add(debugPage);
 
             FlyoutBackdrop = Brush.Gray;
             FlyoutBackgroundColor = Colors.Gray;

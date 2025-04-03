@@ -9,9 +9,9 @@ using System.Threading.Tasks;
 
 namespace AnotherWeatherApp.Views
 {
-    public class BasicHourlyForecastChartView : ContentView
+    public class TemperatureHourlyForecastChartView : ContentView
     {
-        public BasicHourlyForecastChartView(in DetailForecastViewModel model)
+        public TemperatureHourlyForecastChartView(in DetailForecastViewModel model)
         {
             Content = new ChartView
             {
@@ -32,7 +32,7 @@ namespace AnotherWeatherApp.Views
                         {
                             ArgumentDataMember = "Time",
                             AllowLiveDataUpdates = false,
-                        }.Assign(out SeriesDataAdapter dataAdapter)
+                        }.Assign(out SeriesDataAdapter dataAdapterNormal)
                         .Bind(SeriesDataAdapter.DataSourceProperty, static (DetailForecastViewModel vm) => vm.HourlyForecasts),
                         Style = new LineSeriesStyle
                         {
@@ -50,19 +50,14 @@ namespace AnotherWeatherApp.Views
 
                             PointTextPattern = "{A$E hh:mm}: {V}°C",
                         },
-                        AxisX = new DateTimeAxisX {
-                            Label = new()
-                            {
-                                TextFormat = "E",
-                            }
-                        },
                         AxisY = new NumericAxisY
                         {
                             AutoRangeMode = AutoRangeMode.AllValues,
                             DisplayPosition = new AxisDisplayPositionNear(),
                         },
-                    }
-                    .Assign(out SplineSeries splineSeries),
+                        MarkersVisible= true
+                    }.Assign(out SplineSeries splineSeries)
+                    ,
                     new BarSeries
                     {
                         DisplayName = "Rain",
@@ -131,7 +126,8 @@ namespace AnotherWeatherApp.Views
 
 
 
-            dataAdapter.ValueDataMembers.Add(new ValueDataMember { Member = nameof(HourlyForecast.Temperature), Type = DevExpress.Maui.Charts.ValueType.Value });
+            dataAdapterNormal.ValueDataMembers.Add(new ValueDataMember { Member = nameof(HourlyForecast.Temperature), Type = DevExpress.Maui.Charts.ValueType.Value });
+
             dataAdapterRain.ValueDataMembers.Add(new ValueDataMember { Member = nameof(HourlyForecast.RainPrecipitation), Type = DevExpress.Maui.Charts.ValueType.Value });
             dataAdapterSnow.ValueDataMembers.Add(new ValueDataMember { Member = nameof(HourlyForecast.SnowPrecipitation), Type = DevExpress.Maui.Charts.ValueType.Value });
 

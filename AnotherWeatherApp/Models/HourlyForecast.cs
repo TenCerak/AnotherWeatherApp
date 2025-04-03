@@ -11,6 +11,8 @@ namespace AnotherWeatherApp.Models
         public DateTime Time { get; set; }
         public string Description { get; set; }
         public float Temperature { get; set; }
+        public float TemperatureMin { get; set; }
+        public float TemperatureMax { get; set; }
         public float FeelsLike { get; set; }
         public float Pressure { get; set; }
         public float Humidity { get; set; }

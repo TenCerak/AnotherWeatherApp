@@ -101,6 +101,8 @@ namespace AnotherWeatherApp.Models
                     {
                         Time = DateTimeOffset.FromUnixTimeSeconds(item.dt).LocalDateTime,
                         Temperature = item.main.temp,
+                        TemperatureMin = item.main.temp_min,
+                        TemperatureMax = item.main.temp_max,
                         Description = item.weather[0].description,
                         FeelsLike = item.main.feels_like,
                         Humidity = item.main.humidity,

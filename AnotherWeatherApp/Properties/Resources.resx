@@ -1,4 +1,4 @@
-<?xml version="1.0" encoding="utf-8"?>
+
 <root>
   <!-- 
     Microsoft ResX Schema 
@@ -128,5 +128,14 @@
   </data>
   <data name="DetailForecastTitle" xml:space="preserve">
     <value>Detail Forecast</value>
+  </data>
+  <data name="Temperature" xml:space="preserve">
+    <value>Temperature</value>
+  </data>
+  <data name="Pressure" xml:space="preserve">
+    <value>Pressure</value>
+  </data>
+  <data name="Wind" xml:space="preserve">
+    <value>Wind</value>
   </data>
 </root>

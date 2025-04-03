@@ -17,6 +17,7 @@ using Microsoft.Maui.Controls;
 using static CommunityToolkit.Maui.Markup.GridRowsColumns;
 using Microsoft.Maui.Layouts;
 using DevExpress.Maui.Controls;
+using AnotherWeatherApp.Converters;
 
 namespace AnotherWeatherApp.Pages
 {
@@ -32,11 +33,10 @@ namespace AnotherWeatherApp.Pages
                 Command = new Command(async () => await BindingContext.LoadDataAsync().ConfigureAwait(true)),
 
 
-                Content = new FlexLayout()
+                Content = new Grid()
                 {
-                    JustifyContent = FlexJustify.Start,
-                    AlignContent = FlexAlignContent.Stretch,
-                    Direction = FlexDirection.Column,
+                    ColumnDefinitions = Columns.Define(Star),
+                    RowDefinitions = Rows.Define(Auto,Star),
                     GestureRecognizers =
                     {
                         new SwipeGestureRecognizer()
@@ -46,33 +46,10 @@ namespace AnotherWeatherApp.Pages
                         }
                     },
                     Children = {
-                        
-                        new CurrentWeatherContentView(viewModel),
-                        new TabView()
-                        {
-                            ItemsSource = new List<TabViewItem>()
-                            {
-                                new TabViewItem()
-                                {
-                                    HeaderText = "Forecast",
-                                    Content = new BasicHourlyForecastChartView(viewModel),
-                                },
-                                 new TabViewItem()
-                                {
-                                    HeaderText = "Test",
-                                    Content = new ScrollView()
-                                    {
-                                        Content = new StackLayout()
-                                        {
-                                        Children = {
-                                            new Label().Text("Test").TextColor(Colors.White)
-                                        }
-                                            }
-                                    }
-                                }
-                            },
-                            
-                        }.Shrink(700)
+
+                        new CurrentWeatherContentView(viewModel).Row(0).Column(0),
+                        new TabView().Row(1).Column(0)
+                        .Assign(out TabView tabView)
                     }
 
                 }
@@ -81,25 +58,27 @@ namespace AnotherWeatherApp.Pages
             }
             .Bind(RefreshView.IsRefreshingProperty, static (DetailForecastViewModel vm) => vm.IsLoading);
 
+            
+
+            tabView.Items.Add(new TabViewItem()
+            {
+                HeaderText = Properties.Resources.Temperature,
+                Content = new TemperatureHourlyForecastChartView(viewModel)                     
+            });
+
+            tabView.Items.Add(new TabViewItem()
+            {
+                HeaderText = Properties.Resources.Pressure,
+                Content = new PressureHourlyForecastChartView(viewModel)
+            });
+
+            tabView.Items.Add(new TabViewItem()
+            {
+                HeaderText = Properties.Resources.Wind,
+                Content = new WindHourlyForecastChartView(viewModel)
+            });
+
         }
 
     }
-
-
-
-
-    public class StringConverter : IValueConverter
-    {
-        object? IValueConverter.Convert(object? value, Type targetType, object? parameter, CultureInfo culture)
-        {
-            return JsonSerializer.Serialize(value, options: new() { WriteIndented = true });
-        }
-
-        object? IValueConverter.ConvertBack(object? value, Type targetType, object? parameter, CultureInfo culture)
-        {
-            return null;
-        }
-    }
-
-
 }
