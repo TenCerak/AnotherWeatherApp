@@ -4,7 +4,7 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 
-
+namespace Weather.Domain.Models;
 public class HourlyForecastResponse
 {
     public string cod { get; set; }

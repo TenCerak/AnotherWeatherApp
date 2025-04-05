@@ -22,6 +22,10 @@ namespace AnotherWeatherApp
 
             if (pageType == typeof(DetailForecastPage))
                 return $"/{nameof(DetailForecastPage)}";
+
+            if (pageType == typeof(LongTermForecastPage))
+                return $"/{nameof(LongTermForecastPage)}";
+
             throw new InvalidOperationException($"Unknown page type {pageType}");
 
         }

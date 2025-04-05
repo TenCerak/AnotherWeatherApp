@@ -38,6 +38,7 @@ public static class MauiProgram
             .UseDevExpress()
             .UseDevExpressControls()
             .UseDevExpressCharts()
+            .UseDevExpressCollectionView()
             .UseMauiApp<App>()
             .UseMauiCommunityToolkitMarkup()
             .UseMauiCommunityToolkit()
@@ -75,6 +76,7 @@ public static class MauiProgram
 
         services.AddTransientWithShellRoute<MainPage, MainPageViewModel>();
         services.AddTransientWithShellRoute<DetailForecastPage, DetailForecastViewModel>();
+        services.AddTransientWithShellRoute<LongTermForecastPage, LongTermForecastViewModel>();
         services.AddTransientWithShellRoute<DebugPage, DetailForecastViewModel>();
 
 

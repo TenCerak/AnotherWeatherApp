@@ -10,9 +10,10 @@ namespace AnotherWeatherApp
 {
     partial class AppShell : Shell
     {
-        public AppShell(MainPage page, DebugPage debugPage,DetailForecastPage detailForecastPage)
+        public AppShell(MainPage page, DebugPage debugPage,DetailForecastPage detailForecastPage, LongTermForecastPage longTermForecastPage)
         {
             Items.Add(detailForecastPage);
+            Items.Add(longTermForecastPage);
             Items.Add(page);
             Items.Add(debugPage);
 

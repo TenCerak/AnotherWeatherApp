@@ -14,6 +14,7 @@ using System.Runtime.CompilerServices;
 using System.Text;
 using System.Text.Json;
 using System.Threading.Tasks;
+using Weather.Domain.Models;
 
 namespace AnotherWeatherApp.Models
 {

@@ -5,6 +5,7 @@ using System.Text;
 using System.Text.Json.Serialization;
 using System.Threading.Tasks;
 
+namespace Weather.Domain.Models;
 
 public class CurrentWeather
 {

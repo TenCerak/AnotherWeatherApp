@@ -37,7 +37,7 @@ namespace AnotherWeatherApp.Pages.Base
         protected BaseContentPage(in T viewModel, in IAnalyticsService analyticsService)
             : base(analyticsService)
         {
-            base.BindingContext = viewModel;
+            base.BindingContext = ViewModel = viewModel;
         }
         protected new T BindingContext => (T)base.BindingContext;
 
