@@ -93,7 +93,6 @@ public class OpenWeatherMapService : IDisposable, IWeatherService
 
     public async Task<DailyForecastResponse?> GetDailyForecastAsync(double latitude, double longitude, CancellationToken token, int numberOfDays, string language, string units)
     {
-        //api.openweathermap.org/data/2.5/forecast/daily?lat=50.4380288&lon=15.6293524&cnt=14&appid=5b847facc4f6de0b4647f7f0aa886a38
 
         var request = new RestRequest("forecast/daily", Method.Get);
         request.AddParameter("units", units);
