@@ -1,5 +1,6 @@
 ﻿using AnotherWeatherApp.Pages;
 using AnotherWeatherApp.ViewPages;
+using CommunityToolkit.Maui.Markup;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -17,8 +18,15 @@ namespace AnotherWeatherApp
             Items.Add(page);
             Items.Add(debugPage);
 
-            FlyoutBackdrop = Brush.Gray;
+            FlyoutHeader = new Image()
+                .Source(ImageSource.FromFile("logo.svg"))
+                .Aspect(Aspect.AspectFit)
+                .Size(100)
+                .CenterHorizontal()
+                .Margins(10);
+
             FlyoutBackgroundColor = Colors.Gray;
+            this.AppThemeColorBinding(AppShell.FlyoutBackgroundColorProperty, Colors.WhiteSmoke, Colors.Black);
         }
 
     }

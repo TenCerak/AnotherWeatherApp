@@ -20,9 +20,9 @@ public class LongTermForecastPage : BaseContentPage<LongTermForecastViewModel>
             new DXCollectionView
             {
                 IsPullToRefreshEnabled = true,
-                PullToRefreshCommand = new Command(async () =>
+                PullToRefreshCommand = new Command(() =>
                 {
-                    await model.LoadDataAsync().ConfigureAwait(true);
+                    model.LoadDataAsync().ConfigureAwait(false);
                 }),
                 ItemTemplate = new DataTemplate(() =>
                 {
@@ -38,11 +38,25 @@ public class LongTermForecastPage : BaseContentPage<LongTermForecastViewModel>
                             RowDefinitions = Rows.Define(Auto, Auto,Auto,Auto,Auto,Auto),
                             Children =
                             {
-                                new Image().Bind(Image.SourceProperty,nameof(DailyForecast.IconSource)).Row(0).RowSpan(6).Column(0).Size(100).CenterVertical().CenterHorizontal(),
+                                new Image().Bind(Image.SourceProperty,nameof(DailyForecast.IconSource))
+                                .Row(0)
+                                .RowSpan(4)
+                                .Column(0)
+                                .Size(100)
+                                .CenterVertical()
+                                .CenterHorizontal(),
 
-                                new Label().Bind(Label.TextProperty, nameof(DailyForecast.Time),stringFormat: "{0:d.M.yyyy}").Padding(10).Row(0).Column(1),
-                                new Label().Bind(Label.TextProperty, nameof(DailyForecast.Description)).Row(0).Column(2),
-                                
+                                new Label().Bind(Label.TextProperty, nameof(DailyForecast.Time),stringFormat: "{0:d.M.yyyy}")
+                                .Center()
+                                .Row(4)
+                                .Column(0),
+
+                                new Label().Bind(Label.TextProperty, nameof(DailyForecast.Description))
+                                .Center()
+                                .Padding(10)
+                                .Row(5)
+                                .Column(0),
+
                                 new HorizontalStackLayout()
                                 {
                                     new Image().AppThemeBinding(Image.SourceProperty,model.DaySourceLight,model.DaySourceDark).Center().Size(20).Margin(10),
@@ -127,5 +141,14 @@ public class LongTermForecastPage : BaseContentPage<LongTermForecastViewModel>
 
             };
 
+    }
+
+    protected override void OnAppearing()
+    {
+        base.OnAppearing();
+        if (ViewModel.DailyForecasts.Count == 0)
+        {
+            ViewModel.LoadDataAsync().ConfigureAwait(false);
+        }
     }
 }
