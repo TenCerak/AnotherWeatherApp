@@ -14,7 +14,7 @@ public class LongTermForecastPage : BaseContentPage<LongTermForecastViewModel>
     public LongTermForecastPage(LongTermForecastViewModel model, IAnalyticsService analyticsService) : base(model, analyticsService)
     {
         model.LoadDataAsync().ConfigureAwait(false);
-        Title = "Long term forecast";
+        Title = Properties.Resources.LongTermForecast;
         Content = new StackLayout()
         {
             new Button()

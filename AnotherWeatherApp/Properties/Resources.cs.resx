@@ -138,4 +138,7 @@
   <data name="Wind" xml:space="preserve">
     <value>Vítr</value>
   </data>
+  <data name="LongTermForecast" xml:space="preserve">
+    <value>Dlouhodobá předpověď</value>
+  </data>
 </root>

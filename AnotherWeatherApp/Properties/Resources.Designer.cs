@@ -70,6 +70,15 @@ namespace AnotherWeatherApp.Properties {
         }
         
         /// <summary>
+        ///   Looks up a localized string similar to Long term forecast.
+        /// </summary>
+        internal static string LongTermForecast {
+            get {
+                return ResourceManager.GetString("LongTermForecast", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Looks up a localized string similar to Pressure.
         /// </summary>
         internal static string Pressure {

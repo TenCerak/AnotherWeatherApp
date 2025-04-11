@@ -138,4 +138,7 @@
   <data name="Wind" xml:space="preserve">
     <value>Wind</value>
   </data>
+  <data name="LongTermForecast" xml:space="preserve">
+    <value>Long term forecast</value>
+  </data>
 </root>
