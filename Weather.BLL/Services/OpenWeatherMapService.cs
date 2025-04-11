@@ -10,7 +10,7 @@ using System.Threading.Tasks;
 using Weather.Domain.Models;
 
 
-public class OpenWeatherMapService : IDisposable, IWeatherService
+public partial class OpenWeatherMapService : IDisposable, IWeatherService
 {
     private readonly IConfiguration _configuration;
     private RestClient _restClient;

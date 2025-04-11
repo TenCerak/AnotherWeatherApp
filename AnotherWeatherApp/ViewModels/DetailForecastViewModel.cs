@@ -70,7 +70,7 @@ namespace AnotherWeatherApp.Models
             Location location = new Location(0, 0);
             try
             {
-                location = await Geolocation.GetLastKnownLocationAsync().ConfigureAwait(false);
+                location = await Geolocation.GetLastKnownLocationAsync().ConfigureAwait(false) ?? new Location();
 
                 var CurrentWeatherTask = _weatherService.GetCurrentWeatherAsync(
                         location.Latitude,

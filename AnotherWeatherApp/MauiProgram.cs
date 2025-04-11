@@ -16,6 +16,7 @@ using AnotherWeatherApp.Pages;
 using AnotherWeatherApp.Models;
 using System.Reflection;
 using DevExpress.Maui;
+using AnotherWeatherApp.ViewModels;
 
 namespace AnotherWeatherApp;
 
@@ -77,10 +78,12 @@ public static class MauiProgram
         services.AddTransientWithShellRoute<MainPage, MainPageViewModel>();
         services.AddTransientWithShellRoute<DetailForecastPage, DetailForecastViewModel>();
         services.AddTransientWithShellRoute<LongTermForecastPage, LongTermForecastViewModel>();
+        services.AddTransientWithShellRoute<LocationSettingsPage, LocationSettingsViewModel>();
         services.AddTransientWithShellRoute<DebugPage, DetailForecastViewModel>();
 
 
         services.AddSingleton<IWeatherService,OpenWeatherMapService>();
+        services.AddSingleton<IGeocodingService,OpenWeatherMapService>();
     }
 
 

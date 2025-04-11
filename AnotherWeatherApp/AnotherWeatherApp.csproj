@@ -121,6 +121,10 @@
 	</ItemGroup>
 
 	<ItemGroup>
+	  <None Include="Models\FavouriteLocation.cs" />
+	</ItemGroup>
+
+	<ItemGroup>
 	  <None Update="Resources\Splash\splash.svg" Color="#512BD4" BaseSize="128,128" />
 	</ItemGroup>
 
