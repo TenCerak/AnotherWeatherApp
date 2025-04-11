@@ -29,18 +29,75 @@ namespace AnotherWeatherApp.Models
         ObservableCollection<DailyForecast> dailyForecasts = new();
 
         [ObservableProperty]
-        ImageSource sunriseSource;
+        ImageSource sunriseSourceLight;
+        [ObservableProperty]
+        ImageSource sunriseSourceDark;
 
         [ObservableProperty]
-        ImageSource sunsetSource;
+        ImageSource sunsetSourceLight;
+        [ObservableProperty]
+        ImageSource sunsetSourceDark;
+
+        [ObservableProperty]
+        ImageSource daySourceLight;
+        [ObservableProperty]
+        ImageSource daySourceDark;
+
+        [ObservableProperty]
+        ImageSource nightSourceLight;
+        [ObservableProperty]
+        ImageSource nightSourceDark;
+
+        [ObservableProperty]
+        ImageSource humiditySourceLight;
+        [ObservableProperty]
+        ImageSource humiditySourceDark;
+
+        [ObservableProperty]
+        ImageSource windSourceLight;
+        [ObservableProperty]
+        ImageSource windSourceDark;
+
+        [ObservableProperty]
+        ImageSource rainSourceLight;
+        [ObservableProperty]
+        ImageSource rainSourceDark;
+
+        [ObservableProperty]
+        ImageSource snowSourceLight;
+        [ObservableProperty]
+        ImageSource snowSourceDark;
 
         IWeatherService _weatherService;
 
         public LongTermForecastViewModel(IAnalyticsService analyticsService, IDispatcher dispatcher, IWeatherService weatherService) : base(analyticsService, dispatcher)
         {
             _weatherService = weatherService;
-            SunriseSource = ImageSource.FromFile(@"sunrise.png");
-            SunsetSource = ImageSource.FromFile(@"sunset.png");
+            SunriseSourceDark = ImageSource.FromFile(@"sunrise_white.png");
+            SunriseSourceLight = ImageSource.FromFile(@"sunrise_dark.png");
+
+            SunsetSourceDark = ImageSource.FromFile(@"sunset_white.png");
+            SunsetSourceLight = ImageSource.FromFile(@"sunset_dark.png");
+                
+            DaySourceDark = ImageSource.FromFile(@"day_white.png");
+            DaySourceLight = ImageSource.FromFile(@"day_dark.png");
+
+            NightSourceDark = ImageSource.FromFile(@"night_white.png");
+            NightSourceLight = ImageSource.FromFile(@"night_dark.png");
+
+            HumiditySourceDark = ImageSource.FromFile(@"humidity_white.png");
+            HumiditySourceLight = ImageSource.FromFile(@"humidity_dark.png");
+
+            WindSourceDark = ImageSource.FromFile(@"wind_white.png");
+            WindSourceLight = ImageSource.FromFile(@"wind_dark.png");
+
+            RainSourceDark = ImageSource.FromFile(@"rain_white.png");
+            RainSourceLight = ImageSource.FromFile(@"rain_dark.png");
+
+            SnowSourceDark = ImageSource.FromFile(@"snow_white.png");
+            SnowSourceLight = ImageSource.FromFile(@"snow_dark.png");
+
+
         }
 
 
