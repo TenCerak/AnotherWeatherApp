@@ -16,8 +16,6 @@ namespace AnotherWeatherApp
             Items.Add(detailForecastPage);
             Items.Add(longTermForecastPage);
             Items.Add(locationSetPage);
-            Items.Add(page);
-            Items.Add(debugPage);
 
             FlyoutHeader = new Image()
                 .Source(ImageSource.FromFile("logo.svg"))
