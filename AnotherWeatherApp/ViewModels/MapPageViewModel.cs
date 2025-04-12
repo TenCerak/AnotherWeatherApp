@@ -8,9 +8,9 @@ using System.Text;
 using System.Threading.Tasks;
 
 
-public partial class MainPageViewModel : BaseViewModel
+public partial class MapPageViewModel : BaseViewModel
 {
-    public MainPageViewModel(IAnalyticsService analyticsService, IDispatcher dispatcher) : base(analyticsService, dispatcher)
+    public MapPageViewModel(IAnalyticsService analyticsService, IDispatcher dispatcher) : base(analyticsService, dispatcher)
     {
     }
 

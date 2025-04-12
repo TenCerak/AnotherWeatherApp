@@ -150,4 +150,7 @@
   <data name="SearchPlaceholder" xml:space="preserve">
     <value>Vyhledávání</value>
   </data>
+  <data name="Map" xml:space="preserve">
+    <value>Mapa</value>
+  </data>
 </root>

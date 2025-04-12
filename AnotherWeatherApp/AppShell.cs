@@ -11,11 +11,12 @@ namespace AnotherWeatherApp
 {
     partial class AppShell : Shell
     {
-        public AppShell(MainPage page, DebugPage debugPage,DetailForecastPage detailForecastPage, LongTermForecastPage longTermForecastPage, LocationSettingsPage locationSetPage)
+        public AppShell(MapPage page, DebugPage debugPage,DetailForecastPage detailForecastPage, LongTermForecastPage longTermForecastPage, LocationSettingsPage locationSetPage)
         {
             Items.Add(detailForecastPage);
             Items.Add(longTermForecastPage);
             Items.Add(locationSetPage);
+            Items.Add(page);
 
             FlyoutHeader = new Image()
                 .Source(ImageSource.FromFile("logo.svg"))

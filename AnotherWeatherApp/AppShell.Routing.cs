@@ -14,8 +14,8 @@ namespace AnotherWeatherApp
         {
             var pageType = typeof(TPage);
 
-            if (pageType == typeof(MainPage))
-                return $"/{nameof(MainPage)}";
+            if (pageType == typeof(MapPage))
+                return $"/{nameof(MapPage)}";
 
             if (pageType == typeof(DebugPage))
                 return $"/{nameof(DebugPage)}";

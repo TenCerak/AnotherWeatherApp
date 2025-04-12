@@ -17,6 +17,8 @@ using AnotherWeatherApp.Models;
 using System.Reflection;
 using DevExpress.Maui;
 using AnotherWeatherApp.ViewModels;
+using SkiaSharp.Views.Maui.Controls.Hosting;
+
 
 namespace AnotherWeatherApp;
 
@@ -41,6 +43,7 @@ public static class MauiProgram
             .UseDevExpressCharts()
             .UseDevExpressCollectionView()
             .UseMauiApp<App>()
+            .UseSkiaSharp(true)
             .UseMauiCommunityToolkitMarkup()
             .UseMauiCommunityToolkit()
 
@@ -75,7 +78,7 @@ public static class MauiProgram
 
         services.AddSingleton<IAnalyticsService, AnalyticsService>();
 
-        services.AddTransientWithShellRoute<MainPage, MainPageViewModel>();
+        services.AddTransientWithShellRoute<MapPage, MapPageViewModel>();
         services.AddTransientWithShellRoute<DetailForecastPage, DetailForecastViewModel>();
         services.AddTransientWithShellRoute<LongTermForecastPage, LongTermForecastViewModel>();
         services.AddTransientWithShellRoute<LocationSettingsPage, LocationSettingsViewModel>();
