@@ -1,4 +1,5 @@
-﻿using AnotherWeatherApp.Helpers;
+﻿using AnotherWeatherApp.Converters;
+using AnotherWeatherApp.Helpers;
 using AnotherWeatherApp.Interfaces;
 using AnotherWeatherApp.Models;
 using AnotherWeatherApp.Pages.Base;
@@ -21,18 +22,15 @@ namespace AnotherWeatherApp.Pages
         SearchBar searchBar;
         public LocationSettingsPage(IAnalyticsService analyticsService, LocationSettingsViewModel model) : base(in model,in analyticsService)
         {
-            Title = "Location Settings";
+            var borderColorConverter = new LocationToBorderColorConverter();
+            
+
+            Title = Properties.Resources.LocationSettings;
 
             Content = new StackLayout()
             {
-                new HorizontalStackLayout()
-                {
-                    new Label().Text("Use device location"),
-                    new Switch()
-                        .Bind(Switch.IsToggledProperty, static (LocationSettingsViewModel vm) => vm.UseCurrentLocation),
-                },
                 new SearchBar()
-                .Placeholder("Search")
+                .Placeholder(Properties.Resources.SearchPlaceholder)
                 .Assign(out SearchBar search),
 
 
@@ -40,6 +38,7 @@ namespace AnotherWeatherApp.Pages
                 {
                     ItemTemplate = new DataTemplate(() =>
                     {
+                        
                         return new DXBorder()
                         {
                             Margin = new Thickness(10),
@@ -69,6 +68,7 @@ namespace AnotherWeatherApp.Pages
                         };
                     }),
                     SelectionMode = SelectionMode.Single,
+                    
                 }
                 .Bind(DXCollectionView.ItemsSourceProperty, nameof(LocationSettingsViewModel.SearchResults))
                 .Bind(DXCollectionView.IsVisibleProperty, static (LocationSettingsViewModel vm) => vm.SearchVisible)
@@ -77,50 +77,71 @@ namespace AnotherWeatherApp.Pages
 
                 new DXCollectionView()
                 {
-                    IsPullToRefreshEnabled = true,
                     PullToRefreshCommand = new Command(() =>
                     {
                         model.ReloadData();
                     }),
                     ItemTemplate = new DataTemplate(() =>
                     {
-                        return new DXBorder()
+                        var border = new DXBorder()
                         {
+
                             Margin = new Thickness(10),
                             CornerRadius = 8,
-                            BorderColor = Colors.DarkGray,
                             BorderThickness = 2,
                             Content = new HorizontalStackLayout()
                             {
                                 Children =
                                 {
                                     new Label()
-                                    .Bind(Label.TextProperty, nameof(FavouriteLocation.Name)),
-                                    new VerticalStackLayout()
-                                    {
-                                        new Label().Text("Use as current location").TextCenter().Center(),
-                                        new Switch()
-                                        .Bind(Switch.IsToggledProperty, nameof(FavouriteLocation.IsCurrentLocation))
-                                        ,
-                                    },
-
+                                    .Bind(Label.TextProperty, nameof(FavouriteLocation.Name))
+                                    .Padding(10),
                                 },
                                 HorizontalOptions = LayoutOptions.Center,
                                 VerticalOptions = LayoutOptions.Center
-                            },
+                            }                           
                             
-                        };
+                        }
+                        .Bind(DXBorder.BorderColorProperty, nameof(FavouriteLocation.IsCurrentLocation),converter: borderColorConverter);
+                        
+                        return border;
                     }),
+                    SelectionMode = SelectionMode.Single,
+                    AllowDragDropItems = true,
+                    AllowDragDropSortedItems = true,
 
-                }.Bind(DXCollectionView.ItemsSourceProperty,static  (LocationSettingsViewModel vm) => vm.FavouriteLocations),
+
+                }
+                .Bind(DXCollectionView.ItemsSourceProperty,static  (LocationSettingsViewModel vm) => vm.FavouriteLocations)
+                .Assign(out DXCollectionView favLocations)
             };
             searchBar = search;
             search.SearchButtonPressed += Search_SearchButtonPressed;
             search.TextChanged += Search_TextChanged;
             searchResult.SelectionChanged += SearchResult_SelectionChanged;
-
+            favLocations.SelectionChanged += FavLocations_SelectionChanged;
+            favLocations.CompleteItemDragDrop += FavLocations_CompleteItemDragDrop;
         }
 
+        private void FavLocations_CompleteItemDragDrop(object? sender, CompleteItemDragDropEventArgs e)
+        {
+            foreach (var item in (ViewModel.FavouriteLocations))
+            {
+                int order = (sender as DXCollectionView).FindItemHandle(item);
+                ViewModel.SetOrderToFavLocation(item, order);
+            }
+        }
+
+        void FavLocations_SelectionChanged(object? sender, CollectionViewSelectionChangedEventArgs e)
+        {
+            var item = e.AddedItems
+                .OfType<FavouriteLocation>()
+                .FirstOrDefault();
+
+            if (item is null) return;
+            Dispatcher.Dispatch(() => ViewModel.SetLocationAsCurrent(item));
+
+        }
         private void SearchResult_SelectionChanged(object? sender, CollectionViewSelectionChangedEventArgs e)
         {
             searchBar.UpdateText("");
@@ -150,4 +171,7 @@ namespace AnotherWeatherApp.Pages
             }
         }
     }
+
+
+
 }

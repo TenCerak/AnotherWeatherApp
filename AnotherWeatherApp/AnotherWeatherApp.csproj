@@ -45,7 +45,6 @@
 
 	<ItemGroup>
 		<!-- App Icon -->
-		<MauiIcon Include="Resources\AppIcon\appicon.svg" ForegroundFile="Resources\AppIcon\appiconfg.svg" Color="#512BD4" />
 
 		<!-- Splash Screen -->
 
@@ -114,6 +113,10 @@
 
 	<ItemGroup>
 	  <Folder Include="Resources\Languages\" />
+	</ItemGroup>
+
+	<ItemGroup>
+	  <MauiIcon Include="Resources\AppIcon\appicon.svg" />
 	</ItemGroup>
 
 	<ItemGroup>

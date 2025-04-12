@@ -1,4 +1,5 @@
-﻿using AnotherWeatherApp.Interfaces;
+﻿using AnotherWeatherApp.Helpers;
+using AnotherWeatherApp.Interfaces;
 using AnotherWeatherApp.Pages.Base;
 using AnotherWeatherApp.Services;
 using AnotherWeatherApp.ViewModels.Base;
@@ -70,7 +71,7 @@ namespace AnotherWeatherApp.Models
             Location location = new Location(0, 0);
             try
             {
-                location = await Geolocation.GetLastKnownLocationAsync().ConfigureAwait(false) ?? new Location();
+                location = await FavouriteStorage.GetCurrentLocation().ConfigureAwait(true);
 
                 var CurrentWeatherTask = _weatherService.GetCurrentWeatherAsync(
                         location.Latitude,

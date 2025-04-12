@@ -8,6 +8,7 @@ namespace AnotherWeatherApp.Models
 {
     public class FavouriteLocation
     {
+        public int Order { get; set; }
         public string Name { get; set; }
         public string Country { get; set; }
         public string State { get; set; }
@@ -20,6 +21,11 @@ namespace AnotherWeatherApp.Models
             Latitude = latitude;
             Longitude = longitude;
         }
+        public FavouriteLocation()
+        {
+
+        }
+
         public override string ToString()
         {
             return $"{Latitude}, {Longitude}";

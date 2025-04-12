@@ -1,4 +1,5 @@
-﻿using AnotherWeatherApp.Interfaces;
+﻿using AnotherWeatherApp.Helpers;
+using AnotherWeatherApp.Interfaces;
 using AnotherWeatherApp.Pages.Base;
 using AnotherWeatherApp.ViewModels.Base;
 using CommunityToolkit.Mvvm.ComponentModel;
@@ -107,7 +108,7 @@ namespace AnotherWeatherApp.Models
             IsLoading = true;
             try
             {
-                var location = await Geolocation.GetLocationAsync();
+                var location = await FavouriteStorage.GetCurrentLocation().ConfigureAwait(true);
                 if (location is null) return;
 
                 CurrentWeather = await _weatherService.GetCurrentWeatherAsync(

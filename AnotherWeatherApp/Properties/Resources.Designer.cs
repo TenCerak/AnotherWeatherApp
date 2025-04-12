@@ -61,11 +61,29 @@ namespace AnotherWeatherApp.Properties {
         }
         
         /// <summary>
+        ///   Looks up a localized string similar to Current location.
+        /// </summary>
+        internal static string CurrentLocation {
+            get {
+                return ResourceManager.GetString("CurrentLocation", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Looks up a localized string similar to Detail Forecast.
         /// </summary>
         internal static string DetailForecastTitle {
             get {
                 return ResourceManager.GetString("DetailForecastTitle", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Location Settings.
+        /// </summary>
+        internal static string LocationSettings {
+            get {
+                return ResourceManager.GetString("LocationSettings", resourceCulture);
             }
         }
         
@@ -84,6 +102,15 @@ namespace AnotherWeatherApp.Properties {
         internal static string Pressure {
             get {
                 return ResourceManager.GetString("Pressure", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Search.
+        /// </summary>
+        internal static string SearchPlaceholder {
+            get {
+                return ResourceManager.GetString("SearchPlaceholder", resourceCulture);
             }
         }
         

@@ -43,7 +43,7 @@ namespace AnotherWeatherApp.ViewModels
         [ObservableProperty]
         List<Models.FavouriteLocation> favouriteLocations = new();
 
-        public LocationSettingsViewModel(IGeocodingService geocodingService,IAnalyticsService analyticsService, IDispatcher dispatcher) : base(analyticsService, dispatcher)
+        public LocationSettingsViewModel(IGeocodingService geocodingService, IAnalyticsService analyticsService, IDispatcher dispatcher) : base(analyticsService, dispatcher)
         {
             _geocodingService = geocodingService;
             FavouriteLocations = FavouriteStorage.LoadFavorites();
@@ -53,7 +53,20 @@ namespace AnotherWeatherApp.ViewModels
         public void ReloadData()
         {
             IsLoading = true;
-            FavouriteLocations = FavouriteStorage.LoadFavorites();
+            var locations = FavouriteStorage.LoadFavorites();
+
+            if (locations.Any(x => x.Name == Properties.Resources.CurrentLocation) == false)
+            {
+                FavouriteLocation cur = new()
+                {
+                    Name = Properties.Resources.CurrentLocation,
+                    IsCurrentLocation = UseCurrentLocation,
+                    Order = -1,
+                };
+                locations.Add(cur);
+            }
+            locations = locations.OrderBy(x => x.Order).ToList();
+            FavouriteLocations = locations;
             IsLoading = false;
         }
 
@@ -76,6 +89,48 @@ namespace AnotherWeatherApp.ViewModels
             SearchResults = result;
         }
 
+        public void SetLocationAsCurrent(FavouriteLocation location)
+        {
+            var favourites = FavouriteStorage.LoadFavorites();
+
+            if (location.Name == Properties.Resources.CurrentLocation) UseCurrentLocation = true;
+            else UseCurrentLocation = false;
+
+            foreach (var item in favourites)
+            {
+                item.IsCurrentLocation = false;
+            }
+
+            var existingLocation = favourites.FirstOrDefault(x => x.Latitude == location.Latitude && x.Longitude == location.Longitude);
+            if (existingLocation != null)
+            {
+                existingLocation.IsCurrentLocation = true;
+            }
+            else
+            {
+                location.IsCurrentLocation = true;
+                favourites.Add(location);
+            }
+            FavouriteStorage.SaveFavorites(favourites);
+            Dispatcher.Dispatch(() => ReloadData());
+        }
+
+        public void SetOrderToFavLocation(FavouriteLocation location, int order)
+        {
+            var favourites = FavouriteStorage.LoadFavorites();
+            var existingLocation = favourites.FirstOrDefault(x => x.Latitude == location.Latitude && x.Longitude == location.Longitude);
+            if (existingLocation != null)
+            {
+                existingLocation.Order = order;
+            }
+            else
+            {
+                location.Order = order;
+                favourites.Add(location);
+            }
+            FavouriteStorage.SaveFavorites(favourites);
+        }
+
         public void AddFeatureAsFavourite(Feature feature)
         {
             FavouriteLocation location = new(feature.lat, feature.lon);
@@ -83,7 +138,7 @@ namespace AnotherWeatherApp.ViewModels
             location.Name = feature.name;
             location.Country = feature.country;
             location.State = feature.state;
-            
+
 
             var favourites = FavouriteStorage.LoadFavorites();
             foreach (var item in favourites)
@@ -99,6 +154,9 @@ namespace AnotherWeatherApp.ViewModels
             {
                 location.IsCurrentLocation = true;
                 favourites.Add(location);
+
+                if(favourites.Any())
+                    location.Order = favourites.Max(x => x.Order) + 1;
             }
             FavouriteStorage.SaveFavorites(favourites);
             Dispatcher.Dispatch(() => ReloadData());

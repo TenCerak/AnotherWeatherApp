@@ -141,4 +141,13 @@
   <data name="LongTermForecast" xml:space="preserve">
     <value>Dlouhodobá předpověď</value>
   </data>
+  <data name="CurrentLocation" xml:space="preserve">
+    <value>Aktuální poloha</value>
+  </data>
+  <data name="LocationSettings" xml:space="preserve">
+    <value>Nastavení lokace</value>
+  </data>
+  <data name="SearchPlaceholder" xml:space="preserve">
+    <value>Vyhledávání</value>
+  </data>
 </root>

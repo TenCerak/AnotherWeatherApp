@@ -141,4 +141,13 @@
   <data name="LongTermForecast" xml:space="preserve">
     <value>Long term forecast</value>
   </data>
+  <data name="CurrentLocation" xml:space="preserve">
+    <value>Current location</value>
+  </data>
+  <data name="LocationSettings" xml:space="preserve">
+    <value>Location Settings</value>
+  </data>
+  <data name="SearchPlaceholder" xml:space="preserve">
+    <value>Search</value>
+  </data>
 </root>
