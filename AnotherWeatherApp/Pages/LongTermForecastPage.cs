@@ -15,8 +15,11 @@ public class LongTermForecastPage : BaseContentPage<LongTermForecastViewModel>
     {
         model.LoadDataAsync().ConfigureAwait(false);
         Title = Properties.Resources.LongTermForecast;
-        Content = new StackLayout()
+        Content = new Grid()
         {
+            RowDefinitions = Rows.Define(Star),
+            ColumnDefinitions = Columns.Define(Star),
+            Children = {
             new DXCollectionView
             {
                 IsPullToRefreshEnabled = true,
@@ -129,6 +132,8 @@ public class LongTermForecastPage : BaseContentPage<LongTermForecastViewModel>
                             }
 
                         }
+                        .Row(0)
+                        .Column(0)
 
                     };
 
@@ -136,10 +141,12 @@ public class LongTermForecastPage : BaseContentPage<LongTermForecastViewModel>
 
             }
             .Assign(out DXCollectionView view)
+
             .Bind(DXCollectionView.ItemsSourceProperty, static (LongTermForecastViewModel vm) => vm.DailyForecasts)
             .Bind(DXCollectionView.IsRefreshingProperty, static (LongTermForecastViewModel vm) => vm.IsLoading)
 
-            };
+            }
+        };
 
     }
 
