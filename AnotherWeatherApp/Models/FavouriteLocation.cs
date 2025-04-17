@@ -13,6 +13,7 @@ namespace AnotherWeatherApp.Models
         public string Country { get; set; }
         public string State { get; set; }
         public bool IsFavourite { get; set; }
+        public bool CanBeDeleted { get; set; } = true;
         public bool IsCurrentLocation { get; set; }
         public double Latitude { get; set; }
         public double Longitude { get; set; }

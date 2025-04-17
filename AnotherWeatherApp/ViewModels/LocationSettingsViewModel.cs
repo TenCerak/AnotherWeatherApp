@@ -28,6 +28,9 @@ namespace AnotherWeatherApp.ViewModels
         [ObservableProperty]
         bool searchVisible;
 
+        [ObservableProperty]
+        ImageSource deleteIcon;
+
         public bool UseCurrentLocation
         {
             get => FavouriteStorage.UseCurrentLocation;
@@ -47,6 +50,7 @@ namespace AnotherWeatherApp.ViewModels
         {
             _geocodingService = geocodingService;
             FavouriteLocations = FavouriteStorage.LoadFavorites();
+            deleteIcon = ImageSource.FromFile(@"delete.png");
             ReloadData();
         }
 
@@ -155,9 +159,21 @@ namespace AnotherWeatherApp.ViewModels
                 location.IsCurrentLocation = true;
                 favourites.Add(location);
 
-                if(favourites.Any())
+                if (favourites.Any())
                     location.Order = favourites.Max(x => x.Order) + 1;
             }
+            FavouriteStorage.SaveFavorites(favourites);
+            Dispatcher.Dispatch(() => ReloadData());
+        }
+        public void RemoveLocation(FavouriteLocation? item)
+        {
+            if (item is null) return;
+            if(item.CanBeDeleted == false) return;
+            var favourites = FavouriteStorage.LoadFavorites();
+            var existingLocation = favourites.FirstOrDefault(x => x.Latitude == item.Latitude && x.Longitude == item.Longitude);
+            if (existingLocation is null) return;
+
+            favourites.Remove(existingLocation);
             FavouriteStorage.SaveFavorites(favourites);
             Dispatcher.Dispatch(() => ReloadData());
         }

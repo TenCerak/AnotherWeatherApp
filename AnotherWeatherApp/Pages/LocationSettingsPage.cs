@@ -29,6 +29,7 @@ namespace AnotherWeatherApp.Pages
 
             Content = new StackLayout()
             {
+                #region Search
                 new SearchBar()
                 .Placeholder(Properties.Resources.SearchPlaceholder)
                 .Assign(out SearchBar search),
@@ -74,6 +75,7 @@ namespace AnotherWeatherApp.Pages
                 .Bind(DXCollectionView.IsVisibleProperty, static (LocationSettingsViewModel vm) => vm.SearchVisible)
                 .Assign(out DXCollectionView searchResult)
                 ,
+#endregion
 
                 new DXCollectionView()
                 {
@@ -83,7 +85,9 @@ namespace AnotherWeatherApp.Pages
                     }),
                     ItemTemplate = new DataTemplate(() =>
                     {
-                        var border = new DXBorder()
+                        SwipeContainer container = new();
+
+                        container.ItemView = new DXBorder()
                         {
 
                             Margin = new Thickness(10),
@@ -103,8 +107,27 @@ namespace AnotherWeatherApp.Pages
                             
                         }
                         .Bind(DXBorder.BorderColorProperty, nameof(FavouriteLocation.IsCurrentLocation),converter: borderColorConverter);
+
+                        container.FullSwipeMode = FullSwipeMode.End;
+
+                        container.EndSwipeItems.Add(new SwipeContainerItem()
+                        {
+                            Caption = Properties.Resources.Delete,
+                            BackgroundColor = Colors.Red,
+                            Image = ViewModel.DeleteIcon,
+                            Command = new Command(() =>
+                            {
+                                var item = container.BindingContext as FavouriteLocation;
+                                ViewModel.RemoveLocation(item);
+                            }),
+
+                        }
+                        .Bind(IsEnabledProperty,nameof(FavouriteLocation.CanBeDeleted))
+                        .Bind(SwipeContainerItem.ImageProperty, static (LocationSettingsViewModel vm) => vm.DeleteIcon)
+                        );
                         
-                        return border;
+
+                        return container;
                     }),
                     SelectionMode = SelectionMode.Single,
                     AllowDragDropItems = true,

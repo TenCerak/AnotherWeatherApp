@@ -153,4 +153,7 @@
   <data name="Map" xml:space="preserve">
     <value>Mapa</value>
   </data>
+  <data name="Delete" xml:space="preserve">
+    <value>Smazat</value>
+  </data>
 </root>
